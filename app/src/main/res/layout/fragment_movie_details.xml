@@ -1,0 +1,59 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="udacity.android_nanodegree.popularmovies_stage1.MovieDetailsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/original_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/title_text_size"/>
+
+            <ImageView
+                android:id="@+id/poster_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/default_padding"
+                android:layout_below="@id/original_title" />
+
+            <TextView
+                android:id="@+id/user_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/original_title"
+                android:layout_toRightOf="@id/poster_image"
+                android:paddingLeft="@dimen/default_padding"
+                android:textSize="@dimen/default_text_size" />
+
+            <TextView
+                android:id="@+id/release_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/user_rating"
+                android:layout_toRightOf="@id/poster_image"
+                android:paddingLeft="@dimen/default_padding"
+                android:textSize="@dimen/default_text_size"/>
+
+
+            <TextView
+                android:id="@+id/synopsis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/poster_image"
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingTop="@dimen/default_padding"
+                android:textSize="@dimen/default_text_size"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

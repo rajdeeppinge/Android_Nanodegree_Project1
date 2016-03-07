@@ -1,0 +1,16 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridView
+        android:id="@+id/grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="@dimen/default_spacing"
+        android:horizontalSpacing="@dimen/default_spacing"
+        android:stretchMode="columnWidth"
+        tools:context="udacity.android_nanodegree.popularmovies_stage1.MainActivityFragment"/>
+
+</RelativeLayout>
