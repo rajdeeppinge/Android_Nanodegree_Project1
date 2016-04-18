@@ -1,5 +1,7 @@
 package udacity.android_nanodegree.popularmovies_stage1;
 
+/* This class has not been used in the app due to some difficulties */
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
