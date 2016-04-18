@@ -4,13 +4,14 @@
 
     <string name="menu_title_popularity">Most Popular</string>
     <string name="menu_title_rating">Highest Rated</string>
+    <string name="menu_title_favourites">Favourites</string>
 
     <string name="main_activity_fragment_tag">main_activity_fragment</string>
     <string name="movie_details_fragment_tag">"movie_details_fragment"</string>
-    <string name="sort_by_popularity">popularity.desc</string>
-    <string name="sort_by_rating">vote_average.desc</string>
+    <string name="sort_by_popularity">popular</string>
+    <string name="sort_by_rating">top_rated</string>
 
-    <string name="base_url_tmdb">http://api.themoviedb.org/3/discover/movie</string>
+    <string name="base_url_tmdb">http://api.themoviedb.org/3/movie/</string>
     <string name="poster_image_base_url">http://image.tmdb.org/t/p/</string>
-    <string name="my_api_key">put_your_api_key</string>
+    <string name="my_api_key">insert your API keygit </string>
 </resources>

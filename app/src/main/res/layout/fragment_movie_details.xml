@@ -9,6 +9,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/rel_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -36,13 +37,25 @@
                 android:textSize="@dimen/default_text_size" />
 
             <TextView
-                android:id="@+id/release_Date"
+                android:id="@+id/release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_rating"
                 android:layout_toRightOf="@id/poster_image"
                 android:paddingLeft="@dimen/default_padding"
                 android:textSize="@dimen/default_text_size"/>
+
+            <ToggleButton
+                android:id="@+id/mark_favourite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/release_date"
+                android:layout_toRightOf="@+id/poster_image"
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingTop="@dimen/default_padding"
+                android:paddingBottom="@dimen/default_padding"
+                android:textOn="Mark As\nFavourite"
+                android:textOff="Mark As\nFavourite"/>
 
 
             <TextView
@@ -52,6 +65,33 @@
                 android:layout_below="@id/poster_image"
                 android:paddingLeft="@dimen/default_padding"
                 android:paddingTop="@dimen/default_padding"
+                android:textSize="@dimen/default_text_size"/>
+
+            <TextView
+                android:id="@+id/trailer_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/synopsis"
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingTop="@dimen/default_padding"
+                android:textSize="@dimen/default_text_size"
+                android:text="Trailers:"/>
+
+            <LinearLayout
+                android:id="@+id/button_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/trailer_title">
+            </LinearLayout>
+            
+            <TextView
+                android:id="@+id/review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/button_linear_layout"
+                android:paddingTop="@dimen/default_padding"
+                android:paddingLeft="@dimen/default_padding"
                 android:textSize="@dimen/default_text_size"/>
 
         </RelativeLayout>

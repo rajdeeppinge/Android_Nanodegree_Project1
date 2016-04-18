@@ -40,7 +40,7 @@ public class ImageAdapter extends ArrayAdapter<Movie>{
         //if no view present, create new image view
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(355, 550));
+            imageView.setLayoutParams(new GridView.LayoutParams(400, 300));     //(355, 550)
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         }
@@ -50,7 +50,12 @@ public class ImageAdapter extends ArrayAdapter<Movie>{
 
         final Movie movie = getItem(position);
 
-        Picasso.with(mContext).load(movie.getPosterImagePath()).into(imageView);
+        Picasso
+                .with(mContext)
+                .load(movie.getPosterPath())
+                .placeholder(R.drawable.dice1)
+                .error(R.drawable.dice1)
+                .into(imageView);
 
         return imageView;
     }

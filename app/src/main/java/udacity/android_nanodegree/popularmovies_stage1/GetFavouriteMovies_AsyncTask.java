@@ -1,6 +1,5 @@
 package udacity.android_nanodegree.popularmovies_stage1;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -28,9 +26,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Created by root on 2/3/16.
+ * Created by root on 4/18/16.
  */
-public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       //String is the input params which declares the order of sorting movies
+public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void> {
     private Movie[] movies /*= new Movie[20]*/;
     private ImageAdapter imageAdapter;
     private GridView gridView;
@@ -40,12 +38,14 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
 
     private Boolean tabletMode;
 
+ //   private GetMovies_AsyncTask gmov;
+
     String[] trailerName;
     String[] trailerPath;
 
     String reviews = new String();
 
-    public GetMovies_AsyncTask(GridView gridView, Context context, Boolean tabletMode) {
+    public GetFavouriteMovies_AsyncTask(GridView gridView, Context context, Boolean tabletMode) {
         this.gridView = gridView;
         this.context = context;
         this.tabletMode = tabletMode;
@@ -53,10 +53,12 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
     }
 
     @Override
-    protected Void doInBackground(String... params) {
-        String sortBy = params[0];
+    protected Void doInBackground(Object[]... params) {
+        Object[] ids = params[0];
 
-        fetchMovies(sortBy);
+        movies = new Movie[ids.length];
+
+        fetchMoviesById(ids);
 
         if(movies != null) {
             for (int i = 0; i < movies.length; i++) {
@@ -85,28 +87,32 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
         imageAdapter = new ImageAdapter(context, Arrays.asList(movies));
 
         // Get a reference to the ListView, and attach this adapter to it.
-  //      imageAdapter.notifyDataSetChanged();
-        gridView.setAdapter(imageAdapter);
-
         imageAdapter.notifyDataSetChanged();
-
+        gridView.setAdapter(imageAdapter);
+/*
+        if(imageAdapter.isEmpty()) {
+            Toast.makeText(context, "There are no favourite movies", Toast.LENGTH_SHORT).show();
+            return;
+        }
+*/
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie imageClick = movies[position];
 
+                FragmentManager fragmentManager = ((FragmentActivity) context).getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
                 MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
                 movieDetailsFragment.setMovie(imageClick);
 
-                FragmentManager fragmentManager = ((FragmentActivity)context).getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-
- //               fragmentTransaction.replace(R.id.movie_detail_frag, movieDetailsFragment, context.getString(R.string.movie_details_fragment_tag));
+              //  fragmentTransaction.replace(R.id.movie_grid_frag, movieDetailsFragment, context.getString(R.string.movie_details_fragment_tag));
                 if(!tabletMode)
                     fragmentTransaction.replace(R.id.movie_detail_frag, movieDetailsFragment, context.getString(R.string.movie_details_fragment_tag));
                 else
                     fragmentTransaction.replace(R.id.movie_detail_tab_frag, movieDetailsFragment, context.getString(R.string.movie_details_fragment_tag));
+
 
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -117,12 +123,14 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
         return;
     }
 
-    private Movie[] fetchMovies(String sortBy) {
+
+
+    private void fetchMoviesById(Object[] ids) {
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
 
         //JSON array tag
-        final String JSON_ARRAY_TAG = "results";
+//        final String JSON_ARRAY_TAG = "results";
 
 
         //url details
@@ -143,87 +151,85 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
         final String ID_TAG = "id";
 
 
-        try {
-            URL url = new URL(TMDB_BASE_URL + sortBy + "?" + API_KEY_TAG + "=" + API_KEY);
-
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-/*            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);*/
-            httpURLConnection.setRequestMethod("GET");
-/*            httpURLConnection.setDoInput(true);*/
-            httpURLConnection.connect();
-
-
-            // Read the input stream into a String
-            InputStream inputStream = httpURLConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                return null;
-            }
-
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it makes debugging easier
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-
-            String rawJsonData = buffer.toString();
-
-
-
-            // parsing the string and extracting the data
+        for(int i = 0; i < ids.length; i++) {
             try {
-                JSONObject jsonObject = new JSONObject(rawJsonData);
-                JSONArray jsonArray = jsonObject.getJSONArray(JSON_ARRAY_TAG);
+                URL url = new URL(TMDB_BASE_URL + ids[i].toString() + "?" + API_KEY_TAG + "=" + API_KEY);
 
-                movies = new Movie[jsonArray.length()];
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+    /*            httpURLConnection.setReadTimeout(10000);
+                httpURLConnection.setConnectTimeout(15000);*/
+                httpURLConnection.setRequestMethod("GET");
+    /*            httpURLConnection.setDoInput(true);*/
+                httpURLConnection.connect();
 
-                for(int i=0; i<jsonArray.length(); i++) {
-                    JSONObject movie = jsonArray.getJSONObject(i);
 
-                    movies[i] = new Movie(movie.get(ORIGINAL_TITLE_TAG).toString(),
-                            IMAGE_BASE_URL + IMAGE_SIZE + movie.get(POSTER_IMAGE_PATH_TAG).toString(),
-                            movie.get(OVERVIEW_TAG).toString(),
-                            movie.get(VOTE_AVERAGE_TAG).toString(),
-                            movie.get(RELEASE_DATE_TAG).toString(),
-                            movie.getLong(ID_TAG));
+                // Read the input stream into a String
+                InputStream inputStream = httpURLConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return;
                 }
 
-                return movies;
-            }
-            catch (JSONException e) {
-                Log.e(TAG, " JSON exception ", e);
-                internet = false;
-                return null;
-            }
-        }
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        catch (IOException e) {
-            Log.e(TAG, " Problem in opening connection ", e);
-            internet = false;
-            return null;
-        }
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it makes debugging easier
+                    buffer.append(line + "\n");
+                }
+
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    return;
+                }
+
+                String rawJsonData = buffer.toString();
 
 
-        //at the end, close the connection and buffered reader
-        finally{
-            if (httpURLConnection != null) {
-                httpURLConnection.disconnect();
-            }
-            if (bufferedReader != null) {
+                // parsing the string and extracting the data
                 try {
-                    bufferedReader.close();
-                } catch (final IOException e) {
-                    Log.e(TAG, " Error in closing input stream ", e);
+                    JSONObject jsonObject = new JSONObject(rawJsonData);
+                    //                JSONArray jsonArray = jsonObject.getJSONArray(JSON_ARRAY_TAG);
+
+ //                   movies = new Movie[ids.size()];
+
+  //                  for (int i = 0; i < ids.size(); i++) {
+  //                      JSONObject movie = jsonArray.getJSONObject(i);
+
+                        movies[i] = new Movie(jsonObject.get(ORIGINAL_TITLE_TAG).toString(),
+                                IMAGE_BASE_URL + IMAGE_SIZE + jsonObject.get(POSTER_IMAGE_PATH_TAG).toString(),
+                                jsonObject.get(OVERVIEW_TAG).toString(),
+                                jsonObject.get(VOTE_AVERAGE_TAG).toString(),
+                                jsonObject.get(RELEASE_DATE_TAG).toString(),
+                                jsonObject.getLong(ID_TAG));
+ //                   }
+
+ //                   return movies;
+                } catch (JSONException e) {
+                    Log.e(TAG, " JSON exception ", e);
+                    internet = false;
+                    return;
+                }
+            } catch (IOException e) {
+                Log.e(TAG, " Problem in opening connection ", e);
+                internet = false;
+                return;
+            }
+
+
+            //at the end, close the connection and buffered reader
+            finally {
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close();
+                    } catch (final IOException e) {
+                        Log.e(TAG, " Error in closing input stream ", e);
+                    }
                 }
             }
         }
