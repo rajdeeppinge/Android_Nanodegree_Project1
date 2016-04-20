@@ -85,10 +85,10 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
         imageAdapter = new ImageAdapter(context, Arrays.asList(movies));
 
         // Get a reference to the ListView, and attach this adapter to it.
-  //      imageAdapter.notifyDataSetChanged();
+        imageAdapter.notifyDataSetChanged();
         gridView.setAdapter(imageAdapter);
 
-        imageAdapter.notifyDataSetChanged();
+//        imageAdapter.notifyDataSetChanged();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -124,10 +124,8 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
         //JSON array tag
         final String JSON_ARRAY_TAG = "results";
 
-
         //url details
         final String TMDB_BASE_URL = context.getString(R.string.base_url_tmdb);
-//        final String SORT_BY_TAG = "sort_by";
         final String API_KEY_TAG = "api_key";
         final String API_KEY = context.getString(R.string.my_api_key);
 
@@ -177,8 +175,6 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
             }
 
             String rawJsonData = buffer.toString();
-
-
 
             // parsing the string and extracting the data
             try {
@@ -230,7 +226,6 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
     }
 
     public String fetchReview(long id) {
-//        String reviews = new String();
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
@@ -251,10 +246,7 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
             URL url = new URL(TMDB_BASE_URL + id + "/" + REVIEW_TAG + "?" + API_KEY_TAG + "=" + API_KEY);
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
-/*            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);*/
             httpURLConnection.setRequestMethod("GET");
-/*            httpURLConnection.setDoInput(true);*/
             httpURLConnection.connect();
 
 
@@ -326,7 +318,6 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
     }
 
     public String[] fetchTrailers(long id) {
-//        String[] trailers;
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
@@ -347,10 +338,7 @@ public class GetMovies_AsyncTask extends AsyncTask<String, Void, Void> {       /
             URL url = new URL(TMDB_BASE_URL + id + "/" + VIDEO_TAG + "?" + API_KEY_TAG + "=" + API_KEY);
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
-/*            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);*/
             httpURLConnection.setRequestMethod("GET");
-/*            httpURLConnection.setDoInput(true);*/
             httpURLConnection.connect();
 
 

@@ -38,8 +38,6 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
 
     private Boolean tabletMode;
 
- //   private GetMovies_AsyncTask gmov;
-
     String[] trailerName;
     String[] trailerPath;
 
@@ -89,12 +87,7 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
         // Get a reference to the ListView, and attach this adapter to it.
         imageAdapter.notifyDataSetChanged();
         gridView.setAdapter(imageAdapter);
-/*
-        if(imageAdapter.isEmpty()) {
-            Toast.makeText(context, "There are no favourite movies", Toast.LENGTH_SHORT).show();
-            return;
-        }
-*/
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -129,16 +122,10 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
 
-        //JSON array tag
-//        final String JSON_ARRAY_TAG = "results";
-
-
         //url details
         final String TMDB_BASE_URL = context.getString(R.string.base_url_tmdb);
-//        final String SORT_BY_TAG = "sort_by";
         final String API_KEY_TAG = "api_key";
         final String API_KEY = context.getString(R.string.my_api_key);
-
 
         //image url details
         final String IMAGE_BASE_URL = context.getString(R.string.poster_image_base_url);
@@ -156,12 +143,8 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
                 URL url = new URL(TMDB_BASE_URL + ids[i].toString() + "?" + API_KEY_TAG + "=" + API_KEY);
 
                 httpURLConnection = (HttpURLConnection) url.openConnection();
-    /*            httpURLConnection.setReadTimeout(10000);
-                httpURLConnection.setConnectTimeout(15000);*/
                 httpURLConnection.setRequestMethod("GET");
-    /*            httpURLConnection.setDoInput(true);*/
                 httpURLConnection.connect();
-
 
                 // Read the input stream into a String
                 InputStream inputStream = httpURLConnection.getInputStream();
@@ -187,26 +170,17 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
 
                 String rawJsonData = buffer.toString();
 
-
                 // parsing the string and extracting the data
                 try {
                     JSONObject jsonObject = new JSONObject(rawJsonData);
-                    //                JSONArray jsonArray = jsonObject.getJSONArray(JSON_ARRAY_TAG);
 
- //                   movies = new Movie[ids.size()];
+                    movies[i] = new Movie(jsonObject.get(ORIGINAL_TITLE_TAG).toString(),
+                            IMAGE_BASE_URL + IMAGE_SIZE + jsonObject.get(POSTER_IMAGE_PATH_TAG).toString(),
+                            jsonObject.get(OVERVIEW_TAG).toString(),
+                            jsonObject.get(VOTE_AVERAGE_TAG).toString(),
+                            jsonObject.get(RELEASE_DATE_TAG).toString(),
+                            jsonObject.getLong(ID_TAG));
 
-  //                  for (int i = 0; i < ids.size(); i++) {
-  //                      JSONObject movie = jsonArray.getJSONObject(i);
-
-                        movies[i] = new Movie(jsonObject.get(ORIGINAL_TITLE_TAG).toString(),
-                                IMAGE_BASE_URL + IMAGE_SIZE + jsonObject.get(POSTER_IMAGE_PATH_TAG).toString(),
-                                jsonObject.get(OVERVIEW_TAG).toString(),
-                                jsonObject.get(VOTE_AVERAGE_TAG).toString(),
-                                jsonObject.get(RELEASE_DATE_TAG).toString(),
-                                jsonObject.getLong(ID_TAG));
- //                   }
-
- //                   return movies;
                 } catch (JSONException e) {
                     Log.e(TAG, " JSON exception ", e);
                     internet = false;
@@ -236,12 +210,10 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
     }
 
     public String fetchReview(long id) {
-//        String reviews = new String();
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
 
-        //JSON array tag
         final String JSON_ARRAY_TAG = "results";
 
         //url details
@@ -257,10 +229,7 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
             URL url = new URL(TMDB_BASE_URL + id + "/" + REVIEW_TAG + "?" + API_KEY_TAG + "=" + API_KEY);
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
-/*            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);*/
             httpURLConnection.setRequestMethod("GET");
-/*            httpURLConnection.setDoInput(true);*/
             httpURLConnection.connect();
 
 
@@ -287,7 +256,6 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
             }
 
             String rawJsonData = buffer.toString();
-
 
             // parsing the string and extracting the data
             try {
@@ -332,7 +300,6 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
     }
 
     public String[] fetchTrailers(long id) {
-//        String[] trailers;
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
@@ -353,12 +320,8 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
             URL url = new URL(TMDB_BASE_URL + id + "/" + VIDEO_TAG + "?" + API_KEY_TAG + "=" + API_KEY);
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
-/*            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);*/
             httpURLConnection.setRequestMethod("GET");
-/*            httpURLConnection.setDoInput(true);*/
             httpURLConnection.connect();
-
 
             // Read the input stream into a String
             InputStream inputStream = httpURLConnection.getInputStream();
@@ -383,7 +346,6 @@ public class GetFavouriteMovies_AsyncTask extends AsyncTask<Object[], Void, Void
             }
 
             String rawJsonData = buffer.toString();
-
 
             // parsing the string and extracting the data
             try {

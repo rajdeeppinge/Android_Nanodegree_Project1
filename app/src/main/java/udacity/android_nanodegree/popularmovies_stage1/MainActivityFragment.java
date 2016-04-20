@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import java.util.Collection;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -30,8 +29,6 @@ public class MainActivityFragment extends Fragment {
     public Map<String, Long> favouriteMovies;
 
     private Boolean tabletMode = false;
-
-//    private MovieDetailsFragment mdf;
 
     public MainActivityFragment() {
     }
@@ -58,8 +55,6 @@ public class MainActivityFragment extends Fragment {
         // by default, sort by popularity
         gmov = new GetMovies_AsyncTask(gridView, getActivity(), tabletMode);
         gmov.execute(getActivity().getString(R.string.sort_by_popularity));
-
-//        mdf = new MovieDetailsFragment();
 
         return rootView;
     }
@@ -89,20 +84,17 @@ public class MainActivityFragment extends Fragment {
             // fetch ids from sharedpreferences
             favouriteMovieStoredIds = getActivity().getSharedPreferences(MainActivity.MOVIE_IDS, Context.MODE_PRIVATE);
             favouriteMovies = (Map<String, Long>) favouriteMovieStoredIds.getAll();
-            ;
-            //mdf.favouriteMovieStoredIds;
 
             if(favouriteMovies.size() == 0) {
                 Toast.makeText(getActivity(), "There are no favourite movies", Toast.LENGTH_SHORT).show();
             }
+
             //call asynctask to get movies with endpoint movie/id
             else {
                 Object[] ids = favouriteMovies.values().toArray();
 
                 getfav = new GetFavouriteMovies_AsyncTask(gridView, getActivity(), tabletMode);
-                //   for (int i = 0; i < ids.length; i++) {
                 getfav.execute(ids);
-                // }
             }
         }
 
