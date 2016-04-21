@@ -13,5 +13,5 @@
 
     <string name="base_url_tmdb">http://api.themoviedb.org/3/movie/</string>
     <string name="poster_image_base_url">http://image.tmdb.org/t/p/</string>
-    <string name="my_api_key">insert your api key</string>
+    <string name="my_api_key">insert your api key here</string>
 </resources>
